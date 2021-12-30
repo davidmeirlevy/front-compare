@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getList } from './data-list';
+import Item from './Item';
 
 let startTime;
 let type;
@@ -52,7 +53,7 @@ function App() {
 				{loadTimeLabel}
 				{clearTimeLabel}
 			</div>
-			{list.map((row) => <div key={row.id}>{row.content}</div>)}
+			{list.map((row) => <Item key={row.id} item={row}/>)}
 		</div>
 	)
 }

@@ -1,6 +1,7 @@
 <script setup>
 import { nextTick, ref } from 'vue';
 import { getList } from './data-list';
+import Item from './components/Item.vue';
 
 const list = ref([]);
 const loadTime = ref(0);
@@ -34,13 +35,13 @@ function clearList() {
 		<span>clear time: {{ clearTime }}</span>
 	</div>
 	<div>
-		<p v-for="row in list" :key="row.id">{{ row.content }}</p>
+		<Item v-for="row in list" :key="row.id" :item="row"/>
 	</div>
 </template>
 
 <style scoped>
 .options {
-		display: flex;
-		justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 </style>
