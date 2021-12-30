@@ -25,8 +25,7 @@ const FN = {
 				setClearTime(endTime - startTime);
 			}
 		}
-	},
-
+	}
 }
 
 function App() {

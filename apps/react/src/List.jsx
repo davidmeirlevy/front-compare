@@ -1,4 +1,5 @@
 import { memo, useEffect, useState } from 'react';
+import Item from './Item';
 
 let currentLength = 100;
 
@@ -30,7 +31,7 @@ function List({ items }) {
 
 	return (
 		<div>
-			{shownItems.map((row) => <div key={row.id}>{row.content}</div>)}
+			{shownItems.map((row) => <Item key={row.id} item={row}/>)}
 		</div>
 	)
 }

@@ -13,7 +13,7 @@ function loadList() {
 	nextTick(() => {
 		const endTime = performance.now();
 		loadTime.value = endTime - startTime;
-	});
+  });
 }
 
 function clearList() {
@@ -41,7 +41,7 @@ function clearList() {
 
 <style scoped>
 .options {
-		display: flex;
-		justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 </style>

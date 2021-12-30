@@ -1,11 +1,12 @@
 <template>
 	<div>
-		<p v-for="row in shownItems" :key="row.id">{{ row.content }}</p>
+		<Item v-for="row in shownItems" :key="row.id" :item="row"/>
 	</div>
 </template>
 
 <script setup>
 import { computed, onUnmounted, ref } from 'vue';
+import Item from './Item.vue';
 
 const props = defineProps({
 	items: Array
