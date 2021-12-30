@@ -60,7 +60,7 @@ function App() {
 				<span>clear time: <strong>{timers.clear}</strong></span>
 			</header>
 
-			<div ref={innerRef}>
+			<div ref={innerRef} className='list'>
 				{items.map(({index}) => (
 						list[index] && <Item key={index} id={list[index]?.id}>{list[index]?.content}</Item>
 				))}
