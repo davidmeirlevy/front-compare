@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getList } from './data-list';
 
 let startTime;
@@ -15,46 +15,34 @@ const FN = {
 		startTime = performance.now();
 		type = 'clear';
 	},
-	measure(setLoadTime, setClearTime) {
-		const endTime = performance.now();
-		if (startTime) {
-			if (type === 'load') {
-				setLoadTime(endTime - startTime);
-			} else if (type === 'clear') {
-				setClearTime(endTime - startTime);
-			}
-		}
+	measure(setTimers) {
+		setTimers(state => ({...state, [type]: performance.now() - startTime }))
 	}
 }
 
 function App() {
-	const [ list, setList ] = useState([]);
-	const [ loadTime, setLoadTime ] = useState([]);
-	const [ clearTime, setClearTime ] = useState([]);
+	const [list, setList] = useState([])
+	const [timers, setTimers] = useState({load:null, clear:null})
 
-	const loadList = useCallback(() => FN.loadList(setList));
+	const loadList = useCallback(() => FN.loadList(setList), [])
+	const clearList = useCallback(() => FN.clearList(setList), [])
 
-	const clearList = useCallback(() => FN.clearList(setList));
-
-	useEffect(() => FN.measure(setLoadTime, setClearTime), [ list ]);
-
-	const loadListBtn = useMemo(() => <button onClick={loadList}>Load list</button>, [loadList])
-	const clearListBtn = useMemo(() => <button onClick={clearList}>Clear list</button>, [clearList])
-
-	const loadTimeLabel = useMemo(() => <span>load time: {loadTime}</span>, [loadTime])
-	const clearTimeLabel = useMemo(() => <span>clear time: {clearTime}</span>, [clearTime])
+	useEffect(() => FN.measure(setTimers), [list])
 
 	return (
-		<div>
-			<div className="options">
-				{loadListBtn}
-				{clearListBtn}
-				{loadTimeLabel}
-				{clearTimeLabel}
-			</div>
+		<main>
+			<header>
+				<button onClick={loadList}>Load list</button>
+				<button onClick={clearList}>Clear list</button>
+				<span>load time: <strong>{timers.load}</strong></span>
+				<span>clear time: <strong>{timers.clear}</strong></span>
+			</header>
+
 			{list.map((row) => <div key={row.id}>{row.content}</div>)}
-		</div>
+		</main>
 	)
 }
+
+
 
 export default App
