@@ -25,6 +25,6 @@ header {
   gap: 10px;
 }
 
-li{
+.list > div{
   height: 22px;
 }
