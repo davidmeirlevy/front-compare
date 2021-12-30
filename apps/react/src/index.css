@@ -7,12 +7,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+main {
+  box-sizing: border-box;
+  height: 100vh;
+  overflow: auto;
+  padding: 2vw;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
+
 header {
   display: flex;
   gap: 10px;
+}
+
+li{
+  height: 22px;
 }
