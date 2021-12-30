@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getList } from './data-list';
+import List from './List';
 
 let startTime;
 let type;
@@ -24,7 +25,8 @@ const FN = {
 				setClearTime(endTime - startTime);
 			}
 		}
-	}
+	},
+
 }
 
 function App() {
@@ -38,11 +40,11 @@ function App() {
 
 	useEffect(() => FN.measure(setLoadTime, setClearTime), [ list ]);
 
-	const loadListBtn = useMemo(() => <button onClick={loadList}>Load list</button>, [loadList])
-	const clearListBtn = useMemo(() => <button onClick={clearList}>Clear list</button>, [clearList])
+	const loadListBtn = useMemo(() => <button onClick={loadList}>Load list</button>, [ loadList ])
+	const clearListBtn = useMemo(() => <button onClick={clearList}>Clear list</button>, [ clearList ])
 
-	const loadTimeLabel = useMemo(() => <span>load time: {loadTime}</span>, [loadTime])
-	const clearTimeLabel = useMemo(() => <span>clear time: {clearTime}</span>, [clearTime])
+	const loadTimeLabel = useMemo(() => <span>load time: {loadTime}</span>, [ loadTime ])
+	const clearTimeLabel = useMemo(() => <span>clear time: {clearTime}</span>, [ clearTime ])
 
 	return (
 		<div>
@@ -52,7 +54,7 @@ function App() {
 				{loadTimeLabel}
 				{clearTimeLabel}
 			</div>
-			{list.map((row) => <div key={row.id}>{row.content}</div>)}
+			<List items={list}/>
 		</div>
 	)
 }
