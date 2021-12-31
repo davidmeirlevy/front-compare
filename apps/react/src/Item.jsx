@@ -1,19 +1,18 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-function Item({ item }) {
+function Item({ children, id }) {
 	const [showTooltip, setShowTooltip] = useState(false);
 
-	const show = useCallback(() => setShowTooltip(true));
-	const hide = useCallback(() => setShowTooltip(false));
-
-	const tooltip = useMemo(() => showTooltip ? <span className="tooltip">this is the tooltip of id: {item.id}</span> : null, [showTooltip]);
+	const show = useCallback(() => setShowTooltip(true), []);
+	const hide = useCallback(() => setShowTooltip(false), []);
 
 	return (
-		<p className="item">
-			<span onMouseEnter={show} onMouseLeave={hide}>{item.content}</span>
-			{tooltip}
-		</p>
+		<div onMouseEnter={show} onMouseLeave={hide}>
+			<span>{children}</span>
+			{showTooltip && <span className="tooltip"> 👈 tooltip</span>}
+		</div>
 	)
 }
 
-export default memo(Item);
+
+export default Item;
