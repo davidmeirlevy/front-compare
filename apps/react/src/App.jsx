@@ -1,50 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import useVirtual from "react-cool-virtual";
-import { getList } from './data-list';
-
-let startTime;
-let type;
-
-const FN = {
-	loadList(setList) {
-		setList(getList());
-		startTime = performance.now();
-		type = 'load';
-	},
-	clearList(setList) {
-		setList([]);
-		startTime = performance.now();
-		type = 'clear';
-	},
-	measure(setTimers) {
-		setTimers(state => ({...state, [type]: performance.now() - startTime }))
-	}
-}
-
-
-
-function Item({ children, id }) {
-	const [showTooltip, setShowTooltip] = useState(false);
-
-	const show = useCallback(() => setShowTooltip(true), []);
-	const hide = useCallback(() => setShowTooltip(false), []);
-
-	return (
-		<div onMouseEnter={show} onMouseLeave={hide}>
-			<span>{children}</span>
-			{showTooltip && <span className="tooltip"> 👈 tooltip</span>}
-		</div>
-	)
-}
-
+import useVirtual from "react-cool-virtual"
+import Item from './Item'
+import { FN } from './utils'
 
 function App() {
 	const [list, setList] = useState([])
-	const [timers, setTimers] = useState({load:null, clear:null})
-	const { outerRef, innerRef, items } = useVirtual({
-    itemCount: list.length,
-		itemSize: 22,
-  });
+	const [timers, setTimers] = useState({load:0, clear:0})
+	const { outerRef, innerRef, items } = useVirtual({ itemCount:list.length, itemSize:22 })
 
 	const loadList = useCallback(() => FN.loadList(setList), [])
 	const clearList = useCallback(() => FN.clearList(setList), [])
@@ -56,8 +18,8 @@ function App() {
 			<header>
 				<button onClick={loadList}>Load list</button>
 				<button onClick={clearList}>Clear list</button>
-				<span>load time: <strong>{timers.load}</strong></span>
-				<span>clear time: <strong>{timers.clear}</strong></span>
+				<span>load time: <strong>{timers.load}ms</strong></span>
+				<span>clear time: <strong>{timers.clear}ms</strong></span>
 			</header>
 
 			<div ref={innerRef} className='list'>
@@ -68,7 +30,5 @@ function App() {
 		</main>
 	)
 }
-
-
 
 export default App
