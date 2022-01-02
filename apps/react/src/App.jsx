@@ -1,60 +1,33 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { getList } from './data-list';
-import List from './List';
-
-let startTime;
-let type;
-
-const FN = {
-	loadList(setList) {
-		setList(getList());
-		startTime = performance.now();
-		type = 'load';
-	},
-	clearList(setList) {
-		setList([]);
-		startTime = performance.now();
-		type = 'clear';
-	},
-	measure(setLoadTime, setClearTime) {
-		const endTime = performance.now();
-		if (startTime) {
-			if (type === 'load') {
-				setLoadTime(endTime - startTime);
-			} else if (type === 'clear') {
-				setClearTime(endTime - startTime);
-			}
-		}
-	}
-}
+import { useCallback, useEffect, useState } from 'react'
+import useVirtual from "react-cool-virtual"
+import Item from './Item'
+import { FN } from './utils'
 
 function App() {
-	const [ list, setList ] = useState([]);
-	const [ loadTime, setLoadTime ] = useState([]);
-	const [ clearTime, setClearTime ] = useState([]);
+	const [list, setList] = useState([])
+	const [timers, setTimers] = useState({load:0, clear:0})
+	const { outerRef, innerRef, items } = useVirtual({ itemCount:list.length, itemSize:22 })
 
-	const loadList = useCallback(() => FN.loadList(setList));
+	const loadList = useCallback(() => FN.loadList(setList), [])
+	const clearList = useCallback(() => FN.clearList(setList), [])
 
-	const clearList = useCallback(() => FN.clearList(setList));
-
-	useEffect(() => FN.measure(setLoadTime, setClearTime), [ list ]);
-
-	const loadListBtn = useMemo(() => <button onClick={loadList}>Load list</button>, [ loadList ])
-	const clearListBtn = useMemo(() => <button onClick={clearList}>Clear list</button>, [ clearList ])
-
-	const loadTimeLabel = useMemo(() => <span>load time: {loadTime}</span>, [ loadTime ])
-	const clearTimeLabel = useMemo(() => <span>clear time: {clearTime}</span>, [ clearTime ])
+	useEffect(() => FN.measure(setTimers), [list])
 
 	return (
-		<div>
-			<div className="options">
-				{loadListBtn}
-				{clearListBtn}
-				{loadTimeLabel}
-				{clearTimeLabel}
+		<main ref={outerRef}>
+			<header>
+				<button onClick={loadList}>Load list</button>
+				<button onClick={clearList}>Clear list</button>
+				<span>load time: <strong>{timers.load}ms</strong></span>
+				<span>clear time: <strong>{timers.clear}ms</strong></span>
+			</header>
+
+			<div ref={innerRef} className='list'>
+				{items.map(({index}) => (
+						list[index] && <Item key={index} id={list[index]?.id}>{list[index]?.content}</Item>
+				))}
 			</div>
-			<List items={list}/>
-		</div>
+		</main>
 	)
 }
 
